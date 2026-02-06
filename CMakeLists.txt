@@ -1,5 +1,7 @@
 cmake_minimum_required(VERSION 3.20)
 
+project(nevermore-controller C CXX ASM)
+
 include(FetchContent)
 include(cmake/pico_sdk_import.cmake)
 
@@ -45,7 +47,17 @@ if(CCACHE_PROGRAM)
   set(CMAKE_CXX_COMPILER_LAUNCHER "${CCACHE_PROGRAM}")
 endif()
 
-project(nevermore-controller C CXX ASM)
+
+
+# Attempt to derive NEVERMORE_BOARD from PICO_BOARD if not explicitly set
+if(NOT NEVERMORE_BOARD AND PICO_BOARD)
+  if(PICO_BOARD MATCHES "^pico")
+    set(NEVERMORE_BOARD "${PICO_BOARD}")
+  else()
+    string(REPLACE "_" "-" NEVERMORE_BOARD "${PICO_BOARD}")
+  endif()
+  message(STATUS "NEVERMORE_BOARD not set. Derived '${NEVERMORE_BOARD}' from PICO_BOARD='${PICO_BOARD}'")
+endif()
 
 # debug logging options
 option(NEVERMORE_BLUETOOTH_DEBUG "bluetooth debug logging (noisy)" OFF)
@@ -67,8 +79,12 @@ endif()
 set(PICO_CXX_ENABLE_EXCEPTIONS 1)
 pico_sdk_init()
 
+add_compile_definitions(PICO_XOSC_STARTUP_DELAY_MULTIPLIER=64)
+
 add_subdirectory(picowota)
 add_picowota(picowota)
+set_property(TARGET picowota PROPERTY OUTPUT_NAME "picowota_bootloader")
+set_property(TARGET picowota PROPERTY SUFFIX ".elf")
 set_property(TARGET picowota PROPERTY PICOWOTA_BT_SPP "${NEVERMORE_PICO_W_BT}")
 set_property(TARGET picowota PROPERTY PICOWOTA_USB_CDC true)
 # each slot is 4 KiB (== erase sector size), want 4 slots to cycle
@@ -120,7 +136,7 @@ target_compile_definitions(nevermore-controller PUBLIC
   # board config/defs
   NEVERMORE_BOARD="${NEVERMORE_BOARD}"
   NEVERMORE_BOARD_HEADER="config/pins/${NEVERMORE_BOARD}.hpp"
-  NEVERMORE_PICO_W_BT=${NEVERMORE_PICO_W_BT}
+  NEVERMORE_PICO_W_BT=$<BOOL:${NEVERMORE_PICO_W_BT}>
   # logging options
   NEVERMORE_BLUETOOTH_DEBUG=$<BOOL:${NEVERMORE_BLUETOOTH_DEBUG}>
   NEVERMORE_BLUETOOTH_LOW_LEVEL_DEBUG=$<BOOL:${NEVERMORE_BLUETOOTH_LOW_LEVEL_DEBUG}>
@@ -222,12 +238,14 @@ picowota_share_cyw43_firmware(nevermore-controller)
 
 add_executable(nevermore-controller-no-bootloader)
 set_target_properties(nevermore-controller-no-bootloader PROPERTIES OUTPUT_NAME "nevermore-controller_${NEVERMORE_BOARD}")
+set_target_properties(nevermore-controller-no-bootloader PROPERTIES SUFFIX ".elf")
 target_link_libraries(nevermore-controller-no-bootloader PRIVATE nevermore-controller)
 pico_add_extra_outputs(nevermore-controller-no-bootloader)
 picowota_build_no_bootloader_with_app_store(nevermore-controller-no-bootloader picowota)
 
 add_executable(nevermore-controller-ota)
 set_target_properties(nevermore-controller-ota PROPERTIES OUTPUT_NAME "ota-nevermore-controller_${NEVERMORE_BOARD}")
+set_target_properties(nevermore-controller-ota PROPERTIES SUFFIX ".elf")
 target_link_libraries(nevermore-controller-ota PRIVATE nevermore-controller)
 pico_add_extra_outputs(nevermore-controller-ota)
 picowota_build_combined(nevermore-controller-ota picowota)

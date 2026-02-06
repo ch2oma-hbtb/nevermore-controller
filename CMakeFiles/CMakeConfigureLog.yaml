@@ -1,0 +1,70 @@
+
+---
+events:
+  -
+    kind: "find-v1"
+    backtrace:
+      - "/usr/local/share/cmake/Modules/FindGit.cmake:86 (find_program)"
+      - "/usr/local/share/cmake/Modules/FetchContent.cmake:1874 (find_package)"
+      - "/usr/local/share/cmake/Modules/FetchContent.cmake:1609 (__FetchContent_populateSubbuild)"
+      - "/usr/local/share/cmake/Modules/FetchContent.cmake:2145:EVAL:2 (__FetchContent_doPopulation)"
+      - "/usr/local/share/cmake/Modules/FetchContent.cmake:2145 (cmake_language)"
+      - "/usr/local/share/cmake/Modules/FetchContent.cmake:2384 (__FetchContent_Populate)"
+      - "CMakeLists.txt:20 (FetchContent_MakeAvailable)"
+    mode: "program"
+    variable: "GIT_EXECUTABLE"
+    description: "Git command line client"
+    settings:
+      SearchFramework: "FIRST"
+      SearchAppBundle: "FIRST"
+      CMAKE_FIND_USE_CMAKE_PATH: true
+      CMAKE_FIND_USE_CMAKE_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_SYSTEM_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_CMAKE_SYSTEM_PATH: true
+      CMAKE_FIND_USE_INSTALL_PREFIX: true
+    names:
+      - "git"
+    candidate_directories:
+      - "/usr/local/opt/llvm/bin/"
+      - "/Users/chroma/.antigravity/antigravity/bin/"
+      - "/Users/chroma/.nvm/versions/node/v22.19.0/bin/"
+      - "/usr/local/bin/"
+      - "/System/Cryptexes/App/usr/bin/"
+      - "/usr/bin/"
+      - "/bin/"
+      - "/usr/sbin/"
+      - "/sbin/"
+      - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin/"
+      - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin/"
+      - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin/"
+      - "/Library/Apple/usr/bin/"
+      - "/Users/chroma/go/bin/"
+    searched_directories:
+      - "/usr/local/opt/llvm/bin/git"
+      - "/Users/chroma/.antigravity/antigravity/bin/git"
+      - "/Users/chroma/.nvm/versions/node/v22.19.0/bin/git"
+      - "/usr/local/bin/git"
+      - "/System/Cryptexes/App/usr/bin/git"
+    found: "/usr/bin/git"
+    search_context:
+      ENV{PATH}:
+        - "/usr/local/opt/llvm/bin"
+        - "/Users/chroma/.antigravity/antigravity/bin"
+        - "/Users/chroma/.nvm/versions/node/v22.19.0/bin"
+        - "/Users/chroma/.antigravity/antigravity/bin"
+        - "/Users/chroma/.nvm/versions/node/v22.19.0/bin"
+        - "/usr/local/bin"
+        - "/System/Cryptexes/App/usr/bin"
+        - "/usr/bin"
+        - "/bin"
+        - "/usr/sbin"
+        - "/sbin"
+        - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin"
+        - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin"
+        - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin"
+        - "/Library/Apple/usr/bin"
+        - "/Users/chroma/.antigravity/antigravity/bin"
+        - "/Users/chroma/.nvm/versions/node/v22.19.0/bin"
+        - "/Users/chroma/go/bin"
+        - "/Users/chroma/go/bin"
+        - "/Users/chroma/go/bin"

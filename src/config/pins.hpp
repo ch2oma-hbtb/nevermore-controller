@@ -307,10 +307,9 @@ private:
         // currently HW bus is required. future work to support PIO buses
         if (!bus.hardware_bus_num()) throw "Config uses an SPI bus with GPIOs that cannot map to a HW bus.";
 
-        using enum BusSPI::Kind;
         switch (bus.kind) {
-        case generic: break;  // no requirements for generic bus
-        case display: {
+        case BusSPI::Kind::generic: break;  // no requirements for generic bus
+        case BusSPI::Kind::display: {
             if (!bus.send) throw "Config uses a display SPI bus without a MOSI GPIO.";
         } break;
         }

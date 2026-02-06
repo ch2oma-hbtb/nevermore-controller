@@ -10,6 +10,7 @@
 #include "pio_i2c.h"
 #include "pico/error.h"
 #include "pico/timeout_helper.h"
+#include <cassert>
 #include <climits>
 #include <cstdio>
 
@@ -43,7 +44,7 @@ void pio_i2c_rx_enable(PIO pio, uint sm, bool en) {
 static inline void pio_i2c_put16(PIO pio, uint sm, uint16_t data) {
     while (pio_sm_is_tx_fifo_full(pio, sm))
         ;
-        // some versions of GCC dislike this
+    // some versions of GCC dislike this
 #ifdef __GNUC__
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wstrict-aliasing"
@@ -59,7 +60,7 @@ void pio_i2c_put_or_err(PIO pio, uint sm, uint16_t data) {
     while (pio_sm_is_tx_fifo_full(pio, sm))
         if (pio_i2c_check_error(pio, sm)) return;
     if (pio_i2c_check_error(pio, sm)) return;
-        // some versions of GCC dislike this
+    // some versions of GCC dislike this
 #ifdef __GNUC__
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wstrict-aliasing"
@@ -179,7 +180,7 @@ struct Context {
             // printf("interrupt\n");
             return PICO_ERROR_GENERIC;
         }
-        if (timeout_check && timeout_check(ts)) {
+        if (timeout_check && timeout_check(ts, false)) {
             // printf("timeout\n");
             return PICO_ERROR_TIMEOUT;
         }
@@ -213,7 +214,7 @@ struct Context {
     void put(uint16_t data) {
         while (tx_full())
             ;
-            // some versions of GCC dislike this
+        // some versions of GCC dislike this
 #ifdef __GNUC__
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wstrict-aliasing"
@@ -229,7 +230,7 @@ struct Context {
         while (tx_full())
             if (check_error()) return;
         if (check_error()) return;
-            // some versions of GCC dislike this
+        // some versions of GCC dislike this
 #ifdef __GNUC__
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wstrict-aliasing"

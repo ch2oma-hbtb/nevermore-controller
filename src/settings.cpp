@@ -1,6 +1,7 @@
 #include "settings.hpp"
 #include "FreeRTOS.h"  // IWYU pragma: keep
 #include "config.hpp"
+#include "hardware/flash.h"
 #include "led_status.hpp"
 #include "pico/flash.h"
 #include "sdk/ble_data_types.hpp"
@@ -189,7 +190,7 @@ struct SaveParams {
 //      interrupts, which are masked if `DBG_RAM_PROXY` isn't on.
 //      If any asserts fire it'll violate the no IO rule but who cares,
 //      things are already screwed.
-void UNSAFE_save_internal(void* param) {
+void __not_in_flash_func(UNSAFE_save_internal)(void* param) {
     static_assert(MAX_SIZE <= SLOT_SIZE, "more complex impl' required");
     static_assert(SLOT_SIZE == FLASH_SECTOR_SIZE, "more complex impl' required");
     static_assert(2 <= NUM_SLOTS, "impl assumes save cyclic");
